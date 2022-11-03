@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.databinding.FragmentElectionBinding
 
@@ -24,11 +23,11 @@ class ElectionsFragment: Fragment() {
         val dataSource = ElectionDatabase.getInstance(application).electionDao
 
         //TODO: Add ViewModel values and create ViewModel
-        val viewModelFactory = ElectionsViewModelFactory(dataSource, application)
-        electionsViewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
+        //val viewModelFactory = ElectionsViewModelFactory(dataSource, application)
+        //electionsViewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
 
-        binding.lifecycleOwner = this
-        binding.viewModel = electionsViewModel
+        // binding.lifecycleOwner = this
+        // binding.viewModel = electionsViewModel
 
 
 
