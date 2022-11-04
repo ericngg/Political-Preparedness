@@ -28,6 +28,9 @@ class ElectionListAdapter(private val clickListener: ElectionListener): ListAdap
             binding.election = election
             binding.clickListener = clickListener
             binding.executePendingBindings()
+
+            binding.tvElectionName.text = election.name
+            binding.tvElectionDate.text = election.electionDay.toString()
         }
 
         companion object {
