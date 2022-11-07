@@ -42,11 +42,15 @@ interface CivicsApiService {
 
     //TODO: Add voterinfo API Call
     @GET("voterinfo")
-    suspend fun getVoterInfo(@Query("key") apiKey: String, @Query("address") address: String): VoterInfoResponse
+    suspend fun getVoterInfo(
+        @Query("key") apiKey: String,
+        @Query("address") address: String,
+        @Query("electionId") id: Long): VoterInfoResponse
 
     //TODO: Add representatives API Call
     @GET("representatives")
-    suspend fun getRepresentatives(@Query("key") apiKey: String, @Query("address") address: String): RepresentativeResponse
+    suspend fun getRepresentatives(@Query("key") apiKey: String,
+                                   @Query("address") address: String): RepresentativeResponse
 }
 
 object CivicsApi {

@@ -12,6 +12,6 @@ class ElectionsViewModelFactory(val dao: ElectionDao, val app: Application): Vie
             @Suppress("uncheck_cast")
             return ElectionsViewModel(dao, app) as T
         }
-        throw IllegalArgumentException("Error creating mainViewModel")
+        throw IllegalArgumentException("Error creating ElectionsViewModel")
     }
 }

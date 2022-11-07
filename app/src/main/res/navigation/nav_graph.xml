@@ -45,7 +45,7 @@
     </fragment>
     <fragment
         android:id="@+id/electionsDetailFragment"
-        android:name="com.example.android.politicalpreparedness.election.ElectionsDetailFragment"
+        android:name="com.example.android.politicalpreparedness.election.detail.ElectionsDetailFragment"
         android:label="ElectionsDetailFragment" >
         <argument
             android:name="election"

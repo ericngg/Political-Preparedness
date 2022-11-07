@@ -29,10 +29,10 @@ class ElectionsFragment: Fragment() {
         val binding = FragmentElectionBinding.inflate(inflater)
         val application = requireNotNull(this.activity).application
 
-        val dataSource = ElectionDatabase.getInstance(application).electionDao
+        val dao = ElectionDatabase.getInstance(application).electionDao
 
         //TODO: Add ViewModel values and create ViewModel
-        val viewModelFactory = ElectionsViewModelFactory(dataSource, application)
+        val viewModelFactory = ElectionsViewModelFactory(dao, application)
         electionsViewModel = ViewModelProvider(this, viewModelFactory)[ElectionsViewModel::class.java]
 
         binding.lifecycleOwner = this
