@@ -33,12 +33,19 @@ class ElectionsViewModel(val dao: ElectionDao, val app: Application): ViewModel(
     val saved: LiveData<List<Election>>
         get() = _saved
 
+    private val _navigateToElectionDetail = MutableLiveData<Election>()
+    val navigateToElectionDetail
+        get() = _navigateToElectionDetail
+
+
 
     //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
     fun fetchUpcoming() {
         viewModelScope.launch{
             try {
                 _upcoming.value = CivicsApi.retrofitService.getElections(BuildConfig.API_KEY).elections
+
+                Log.i("test", "${upcoming.value?.size}")
             } catch (e: Exception) {
                 Log.e(TAG, "Upcoming Election fetch error $e")
             }
@@ -58,5 +65,12 @@ class ElectionsViewModel(val dao: ElectionDao, val app: Application): ViewModel(
     }
 
     //TODO: Create functions to navigate to saved or upcoming election voter info
+    fun onElectionClick(election: Election) {
+        _navigateToElectionDetail.value = election
+    }
+
+    fun onElectionDetailNavigated() {
+        _navigateToElectionDetail.value = null
+    }
 
 }

@@ -15,23 +15,27 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(election)}"
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/tvElectionName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="0dp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="Obama" />
+            tools:text="VIP TEST Election" />
 
         <TextView
             android:id="@+id/tvElectionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/tvElectionName"
+            android:layout_marginTop="5dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvElectionName"
-            tools:text="Nov 2, 2022" />
+            tools:text="Fri Jun 06, 00:00:00 PDT 2025" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

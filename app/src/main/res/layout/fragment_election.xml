@@ -34,9 +34,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
+            android:orientation="vertical"
             app:layout_constraintHeight_percent=".4"
             app:layout_constraintTop_toBottomOf="@+id/tvUpcoming"
-            tools:layout_editor_absoluteX="1dp" />
+            tools:layout_editor_absoluteX="1dp"
+            tools:listitem="@layout/item_election"/>
 
         <!-- TODO: Add Saved Election Recycler and Header -->
         <TextView
@@ -55,9 +57,11 @@
             android:id="@+id/rvSaved"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
             app:layout_constraintHeight_percent=".4"
             app:layout_constraintTop_toBottomOf="@+id/tvSaved"
-            tools:layout_editor_absoluteX="1dp" />
+            tools:layout_editor_absoluteX="55dp"
+            tools:listitem="@layout/item_election" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
