@@ -52,9 +52,9 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
         viewModelScope.launch {
             try {
                 // Test call
-                _data.value = CivicsApi.retrofitService.getVoterInfo(BuildConfig.API_KEY, testAddress, testElectionId.toLong())
+                //_data.value = CivicsApi.retrofitService.getVoterInfo(BuildConfig.API_KEY, testAddress, testElectionId.toLong())
 
-                //_data.value = CivicsApi.retrofitService.getVoterInfo(BuildConfig.API_KEY, address, election.id.toLong())
+                _data.value = CivicsApi.retrofitService.getVoterInfo(BuildConfig.API_KEY, address, election.id.toLong())
 
                 Log.i(TAG, data.value?.state?.get(0)?.electionAdministrationBody?.ballotInfoUrl.toString())
                 Log.i(TAG, data.value?.state?.get(0)?.electionAdministrationBody?.votingLocationFinderUrl.toString())
@@ -72,6 +72,8 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
         CoroutineScope(Dispatchers.IO).launch {
             dao.insert(election)
             _following.postValue(true)
+
+            Log.i(TAG, "Follow successful")
         }
     }
 
@@ -79,6 +81,8 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
         CoroutineScope(Dispatchers.IO).launch {
             dao.delete(election)
             _following.postValue(false)
+
+            Log.i(TAG, "Unfollow successful")
         }
     }
 

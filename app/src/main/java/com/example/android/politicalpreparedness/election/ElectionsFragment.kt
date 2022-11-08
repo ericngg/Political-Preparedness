@@ -43,7 +43,7 @@ class ElectionsFragment: Fragment() {
         })
 
         val adapterSaved = ElectionListAdapter(ElectionListAdapter.ElectionListener { election ->
-
+            electionsViewModel.onElectionClick(election)
         })
 
         binding.rvUpcoming.layoutManager = LinearLayoutManager(context)
@@ -64,6 +64,11 @@ class ElectionsFragment: Fragment() {
             Log.i(TAG, "upcoming list updated")
         })
 
+        electionsViewModel.saved.observe(viewLifecycleOwner, Observer {
+            adapterSaved.submitList(it)
+            Log.i(TAG, "saved list updated")
+        })
+
         electionsViewModel.navigateToElectionDetail.observe(viewLifecycleOwner, Observer { election ->
             election?.let {
                 this.findNavController().navigate(ElectionsFragmentDirections.actionElectionsFragmentToElectionsDetailFragment(election))
@@ -81,9 +86,7 @@ class ElectionsFragment: Fragment() {
 
         electionsViewModel.fetchUpcoming()
 
-        Log.i("test", "${electionsViewModel.upcoming.value?.size}")
-
-        //electionsViewModel.fetchSaved()
+        electionsViewModel.fetchSaved()
     }
 
 }

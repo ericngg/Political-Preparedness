@@ -44,8 +44,6 @@ class ElectionsViewModel(val dao: ElectionDao, val app: Application): ViewModel(
         viewModelScope.launch{
             try {
                 _upcoming.value = CivicsApi.retrofitService.getElections(BuildConfig.API_KEY).elections
-
-                Log.i("test", "${upcoming.value?.size}")
             } catch (e: Exception) {
                 Log.e(TAG, "Upcoming Election fetch error $e")
             }
