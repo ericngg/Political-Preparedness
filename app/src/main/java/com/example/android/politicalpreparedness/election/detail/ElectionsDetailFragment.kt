@@ -20,16 +20,15 @@ import com.google.android.material.snackbar.Snackbar
 class ElectionsDetailFragment : Fragment() {
 
     private lateinit var electionsDetailViewModel: ElectionsDetailViewModel
-
     private lateinit var election: Election
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
+
         val binding = FragmentElectionDetailBinding.inflate(inflater)
         binding.lifecycleOwner = this
 
         election = ElectionsDetailFragmentArgs.fromBundle(requireArguments()).election
-
         binding.election = election
 
         val application = requireNotNull(this.activity).application
@@ -43,13 +42,16 @@ class ElectionsDetailFragment : Fragment() {
         }
 
         binding.btnFollow.setOnClickListener {
+            // If the user was following, unfollow
             if (electionsDetailViewModel.following.value == true) {
                 electionsDetailViewModel.unfollow()
             } else {
+                // else follow
                 electionsDetailViewModel.follow()
             }
         }
 
+        // Onclick for voting locations, shows snackbar if there is no voting information
         binding.tvLocation.setOnClickListener{
             val url = electionsDetailViewModel.votingUrl.value
 
@@ -61,6 +63,7 @@ class ElectionsDetailFragment : Fragment() {
             }
         }
 
+        // Onclick for ballot information, shows snackbar if theres no voting information
         binding.tvBallot.setOnClickListener{
             val url = electionsDetailViewModel.ballotUrl.value
 
@@ -72,6 +75,7 @@ class ElectionsDetailFragment : Fragment() {
             }
         }
 
+        // Inits the button status whether the user is following or not
         electionsDetailViewModel.following.observe(viewLifecycleOwner, Observer { following ->
             if (following) {
                 binding.btnFollow.text = "Unfollow Election"
@@ -90,7 +94,6 @@ class ElectionsDetailFragment : Fragment() {
 
         electionsDetailViewModel.setElection(election)
         electionsDetailViewModel.isFollowing()
-
         electionsDetailViewModel.fetch()
     }
 }

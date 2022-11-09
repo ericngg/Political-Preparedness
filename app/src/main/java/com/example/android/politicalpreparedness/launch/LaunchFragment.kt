@@ -20,10 +20,18 @@ class LaunchFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     *  Navigates to the election screen
+     *
+     **/
     private fun navToElections() {
         this.findNavController().navigate(LaunchFragmentDirections.actionLaunchFragmentToElectionsFragment())
     }
 
+    /**
+     *  Navigates to the representative screen
+     *
+     **/
     private fun navToRepresentatives() {
         this.findNavController().navigate(LaunchFragmentDirections.actionLaunchFragmentToRepresentativeFragment())
     }

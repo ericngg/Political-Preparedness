@@ -17,8 +17,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-        <!-- TODO: Add Button to navigate to upcoming elections. -->
-
         <Button
             android:id="@+id/btnElections"
             android:layout_width="match_parent"

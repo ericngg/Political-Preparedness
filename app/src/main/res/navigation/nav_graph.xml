@@ -23,7 +23,11 @@
         android:id="@+id/representativeFragment"
         android:name="com.example.android.politicalpreparedness.representative.DetailFragment"
         android:label="fragment_representative"
-        tools:layout="@layout/fragment_representative"></fragment>
+        tools:layout="@layout/fragment_representative">
+        <action
+            android:id="@+id/action_representativeFragment_to_representativeDetailFragment"
+            app:destination="@id/representativeDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/voterInfoFragment"
         android:name="com.example.android.politicalpreparedness.election.VoterInfoFragment"
@@ -50,6 +54,20 @@
         <argument
             android:name="election"
             app:argType="com.example.android.politicalpreparedness.network.models.Election" />
+    </fragment>
+    <fragment
+        android:id="@+id/representativeDetailFragment"
+        android:name="com.example.android.politicalpreparedness.representative.detail.RepresentativeDetailFragment"
+        android:label="RepresentativeDetailFragment" >
+        <argument
+            android:name="photoUrl"
+            app:argType="string" />
+        <argument
+            android:name="name"
+            app:argType="string" />
+        <argument
+            android:name="role"
+            app:argType="string" />
     </fragment>
 
 </navigation>

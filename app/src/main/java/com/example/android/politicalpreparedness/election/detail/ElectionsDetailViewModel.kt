@@ -11,7 +11,6 @@ import com.example.android.politicalpreparedness.database.ElectionDao
 import com.example.android.politicalpreparedness.network.CivicsApi
 import com.example.android.politicalpreparedness.network.models.Election
 import com.example.android.politicalpreparedness.network.models.VoterInfoResponse
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -42,10 +41,11 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
     }
 
     fun fetch() {
+        // State can sometimes be empty
         val division = election.division
         val address = "${division.state}, US"
 
-        // Test data
+        // Test data, used to test if ballot/information links worked with a working address
         val testAddress = "Washington, US"
         val testElectionId = 2000
 
@@ -68,6 +68,10 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
         }
     }
 
+    /**
+     *  Inserts the election into the database if the user follows
+     *
+     **/
     fun follow() {
         CoroutineScope(Dispatchers.IO).launch {
             dao.insert(election)
@@ -77,6 +81,10 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
         }
     }
 
+    /**
+     *  Deletes the election into the database if the user unfollows
+     *
+     **/
     fun unfollow() {
         CoroutineScope(Dispatchers.IO).launch {
             dao.delete(election)
@@ -86,6 +94,13 @@ class ElectionsDetailViewModel(val dao: ElectionDao, val app: Application): View
         }
     }
 
+    /**
+     *  Checks the database if the user is following the election.
+     *
+     *  If the return value is not null, then the user follows
+     *  else return value is null, then the user does not follow
+     *
+     **/
     fun isFollowing() {
         CoroutineScope(Dispatchers.IO).launch {
             val daoElection = dao.get(election.id.toLong())

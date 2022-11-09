@@ -8,27 +8,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.android.politicalpreparedness.BuildConfig
 import com.example.android.politicalpreparedness.database.ElectionDao
-import com.example.android.politicalpreparedness.database.ElectionDatabase
 import com.example.android.politicalpreparedness.network.CivicsApi
-import com.example.android.politicalpreparedness.network.CivicsApiService
 import com.example.android.politicalpreparedness.network.models.Election
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-//TODO: Construct ViewModel and provide election datasource
 class ElectionsViewModel(val dao: ElectionDao, val app: Application): ViewModel() {
 
     private val TAG = "ElectionViewModel"
 
-    private val database = ElectionDatabase.getInstance(app).electionDao
-
-    //TODO: Create live data val for upcoming elections
     private val _upcoming = MutableLiveData<List<Election>>()
     val upcoming: LiveData<List<Election>>
         get() = _upcoming
 
-    //TODO: Create live data val for saved elections
     private val _saved = MutableLiveData<List<Election>>()
     val saved: LiveData<List<Election>>
         get() = _saved
@@ -37,9 +30,10 @@ class ElectionsViewModel(val dao: ElectionDao, val app: Application): ViewModel(
     val navigateToElectionDetail
         get() = _navigateToElectionDetail
 
-
-
-    //TODO: Create val and functions to populate live data for upcoming elections from the API and saved elections from local database
+    /**
+     *  Calls the API for upcoming elections
+     *
+     **/
     fun fetchUpcoming() {
         viewModelScope.launch{
             try {
@@ -50,25 +44,35 @@ class ElectionsViewModel(val dao: ElectionDao, val app: Application): ViewModel(
         }
     }
 
+    /**
+     *  Calls the database for saved elections
+     *
+     *  If an exception is catched due to NPE, it creates an empty ArrayList
+     **/
     fun fetchSaved() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                _saved.postValue(database.getAllElection())
+                _saved.postValue(dao.getAllElection())
             } catch(e: Exception) {
                 Log.e(TAG, "Saved Election fetch error $e")
-
                 _saved.value = ArrayList()
             }
         }
     }
 
-    //TODO: Create functions to navigate to saved or upcoming election voter info
+    /**
+     *  Sets the election clicked value (Before navigation)
+     *
+     **/
     fun onElectionClick(election: Election) {
         _navigateToElectionDetail.value = election
     }
 
+    /**
+     *  Clears the election value (After navigation)
+     *
+     **/
     fun onElectionDetailNavigated() {
         _navigateToElectionDetail.value = null
     }
-
 }

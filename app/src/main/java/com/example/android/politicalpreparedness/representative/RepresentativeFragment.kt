@@ -2,7 +2,6 @@ package com.example.android.politicalpreparedness.representative
 
 import android.Manifest
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,6 +18,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.politicalpreparedness.BuildConfig
 import com.example.android.politicalpreparedness.R
@@ -32,21 +32,16 @@ import java.util.Locale
 class DetailFragment : Fragment() {
 
     companion object {
-        //TODO: Add Constant for Location request
         private val REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE = 34
     }
 
     private val TAG = "RepresentativeFragment"
 
-    //TODO: Declare ViewModel
     private lateinit var representativeViewModel: RepresentativeViewModel
     private lateinit var binding: FragmentRepresentativeBinding
 
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        //TODO: Establish bindings
         binding = FragmentRepresentativeBinding.inflate(inflater)
 
         val viewModelFactory = RepresentativeViewModelFactory()
@@ -55,19 +50,17 @@ class DetailFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = representativeViewModel
 
-        //TODO: Define and assign Representative adapter
         val adapterRepresentative = RepresentativeListAdapter(RepresentativeListAdapter.RepresentativeListener { representative ->
-
+            representativeViewModel.onRepresentativeClick(representative)
         })
         binding.rvRepresentatives.layoutManager = LinearLayoutManager(context)
         binding.rvRepresentatives.adapter = adapterRepresentative
 
-        //TODO: Populate Representative adapter
-
-        //TODO: Establish button listeners for field and location search
+        // Find my representatives button onClick
         binding.btnSearch.setOnClickListener {
             hideKeyboard()
 
+            // Makes sure none of the text fields are empty
             when {
                 binding.tvAddress1.text.isNullOrEmpty() -> {
                     Snackbar.make(binding.mlLayout, getString(R.string.empty_address1), Snackbar.LENGTH_LONG).show()
@@ -95,6 +88,7 @@ class DetailFragment : Fragment() {
             }
         }
 
+        // Find my location button onClick
         binding.btnLocation.setOnClickListener {
             if (checkLocationPermissions()) {
                 getLocation()
@@ -105,37 +99,66 @@ class DetailFragment : Fragment() {
             adapterRepresentative.submitList(it)
         }
 
+        representativeViewModel.navigateToRepresentativeDetail.observe(viewLifecycleOwner) { representative ->
+            representative?.let {
+                var photoUrl = ""
 
+                if (representative.official.photoUrl != null) {
+                    photoUrl = representative.official.photoUrl
+                }
 
+                this.findNavController().navigate(DetailFragmentDirections.actionRepresentativeFragmentToRepresentativeDetailFragment(
+                    photoUrl,
+                    representative.official.name!!,
+                    representative.office.name!!
+                ))
+                representativeViewModel.onNavigatedRepresentativeDetailNavigated()
+            }
+        }
         return binding.root
     }
 
+    /**
+     *  Checks if permission is granted
+     *  If false, request for permissions
+     *
+     */
     private fun checkLocationPermissions(): Boolean {
         return if (isPermissionGranted()) {
             true
         } else {
-            //TODO: Request Location permissions
             requestLocationPermissions()
             false
         }
     }
 
+    /**
+     *  Requests for location permissions
+     *
+     */
     private fun requestLocationPermissions() {
         if (foregroundLocationPermissionApproved())
             return
 
         var permissionsArray = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-
         requestPermissions(permissionsArray, REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE)
 
     }
 
+    /**
+     *  Checks if location permission was granted
+     *
+     */
     private fun isPermissionGranted() : Boolean {
         return ContextCompat.checkSelfPermission(
             requireContext(),
             Manifest.permission.ACCESS_FINE_LOCATION) === PackageManager.PERMISSION_GRANTED
     }
 
+    /**
+     *  Checks if location permissions were approved
+     *
+     */
     @TargetApi(29)
     private fun foregroundLocationPermissionApproved(): Boolean {
         return (PackageManager.PERMISSION_GRANTED ==
@@ -144,9 +167,13 @@ class DetailFragment : Fragment() {
                             Manifest.permission.ACCESS_FINE_LOCATION))
     }
 
+    /**
+     *  Handles location permission results to get location on permission granted
+     *
+     *  If permission not granted, a snackbar appears with settings intent
+     */
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        //TODO: Handle location permission result to get location on permission granted
 
         if (requestCode == REQUEST_FOREGROUND_PERMISSIONS_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && (grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
@@ -166,10 +193,11 @@ class DetailFragment : Fragment() {
         }
     }
 
+    /**
+     *  Gets location of user and  fills the text boxes with the address
+     *
+     */
     private fun getLocation() {
-        //TODO: Get location from LocationServices
-        //TODO: The geoCodeLocation method is a helper function to change the lat/long location to a human readable street address
-
         var fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
         if (ActivityCompat.checkSelfPermission(
@@ -211,6 +239,10 @@ class DetailFragment : Fragment() {
 
     }
 
+    /**
+     *  Converts a geo Location object with latitude and longitude and returns an address object
+     *
+     */
     private fun geoCodeLocation(location: Location): Address {
         val geocoder = Geocoder(context, Locale.getDefault())
         return geocoder.getFromLocation(location.latitude, location.longitude, 1)
@@ -220,6 +252,10 @@ class DetailFragment : Fragment() {
                 .first()
     }
 
+    /**
+     *  Hides the keyboard
+     *
+     */
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)

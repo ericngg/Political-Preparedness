@@ -24,17 +24,16 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
 
     override fun onBindViewHolder(holder: RepresentativeViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(clickListener, item)
     }
 
     class RepresentativeViewHolder(val binding: ItemRepresentativesBinding): RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Representative) {
+        fun bind(clickListener: RepresentativeListener, item: Representative) {
             binding.representative = item
             binding.ivProfile.setImageResource(R.drawable.ic_profile)
-
-            //TODO: Show social links ** Hint: Use provided helper methods
-            //TODO: Show www link ** Hint: Use provided helper methods
+            binding.clickListener = clickListener
+            binding.executePendingBindings()
 
             item.official.urls?.let { urls ->
                 showWWWLinks(urls)
@@ -43,12 +42,12 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
             item.official.channels?.let { channels ->
                 showSocialLinks(channels)
             }
-
-            binding.executePendingBindings()
         }
 
-        //TODO: Add companion object to inflate ViewHolder (from)
-
+        /**
+         *  Helper function to show facebook and twitter links
+         *
+         */
         private fun showSocialLinks(channels: List<Channel>) {
             val facebookUrl = getFacebookUrl(channels)
             if (!facebookUrl.isNullOrBlank()) { enableLink(binding.ivFacebook, facebookUrl) }
@@ -57,27 +56,47 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
             if (!twitterUrl.isNullOrBlank()) { enableLink(binding.ivTwitter, twitterUrl) }
         }
 
+        /**
+         *  Helper function to show website link
+         *
+         */
         private fun showWWWLinks(urls: List<String>) {
             enableLink(binding.ivWebsite, urls.first())
         }
 
+        /**
+         *  Helper function that finds the first facebook url from the list
+         *
+         */
         private fun getFacebookUrl(channels: List<Channel>): String? {
             return channels.filter { channel -> channel.type == "Facebook" }
                 .map { channel -> "https://www.facebook.com/${channel.id}" }
                 .firstOrNull()
         }
 
+        /**
+         *  Helper function to find the first twitter url from the list
+         *
+         */
         private fun getTwitterUrl(channels: List<Channel>): String? {
             return channels.filter { channel -> channel.type == "Twitter" }
                 .map { channel -> "https://www.twitter.com/${channel.id}" }
                 .firstOrNull()
         }
 
+        /**
+         *  Helper function to hide visibility for links that aren't available
+         *
+         */
         private fun enableLink(view: ImageView, url: String) {
             view.visibility = View.VISIBLE
             view.setOnClickListener { setIntent(url) }
         }
 
+        /**
+         *  Helper function to redirect the screen to a website with a link
+         *
+         */
         private fun setIntent(url: String) {
             val uri = Uri.parse(url)
             val intent = Intent(ACTION_VIEW, uri)
@@ -94,7 +113,10 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
         }
     }
 
-    //TODO: Create RepresentativeDiffCallback
+    /**
+     *  RepresentativeDiffUtil
+     *
+     */
     class RepresentativeDiffCallback : DiffUtil.ItemCallback<Representative>() {
         override fun areItemsTheSame(oldItem: Representative, newItem: Representative): Boolean {
             return oldItem.official.name == newItem.official.name
@@ -106,7 +128,10 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
 
     }
 
-    //TODO: Create RepresentativeListener
+    /**
+     *  Representative click Listener
+     *
+     */
     class RepresentativeListener(val clickListener: (representative: Representative) -> Unit) {
         fun onClick(representative: Representative) = clickListener(representative)
     }
