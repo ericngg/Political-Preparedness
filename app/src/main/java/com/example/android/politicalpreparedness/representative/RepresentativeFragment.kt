@@ -7,8 +7,11 @@ import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android.politicalpreparedness.databinding.FragmentRepresentativeBinding
 import com.example.android.politicalpreparedness.network.models.Address
+import com.example.android.politicalpreparedness.representative.adapter.RepresentativeListAdapter
 import java.util.Locale
 
 class DetailFragment : Fragment() {
@@ -17,21 +20,41 @@ class DetailFragment : Fragment() {
         //TODO: Add Constant for Location request
     }
 
+    private val TAG = "RepresentativeFragment"
+
     //TODO: Declare ViewModel
+    private lateinit var representativeViewModel: RepresentativeViewModel
 
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        //TODO: Establish bindings
         val binding = FragmentRepresentativeBinding.inflate(inflater)
 
-        //TODO: Establish bindings
+        val viewModelFactory = RepresentativeViewModelFactory()
+        representativeViewModel = ViewModelProvider(this, viewModelFactory)[RepresentativeViewModel::class.java]
+
+        binding.lifecycleOwner = this
+        binding.viewModel = representativeViewModel
 
         //TODO: Define and assign Representative adapter
+        val adapterRepresentative = RepresentativeListAdapter(RepresentativeListAdapter.RepresentativeListener { representative ->
+
+        })
+        binding.rvRepresentatives.layoutManager = LinearLayoutManager(context)
+        binding.rvRepresentatives.adapter = adapterRepresentative
 
         //TODO: Populate Representative adapter
 
         //TODO: Establish button listeners for field and location search
+        binding.btnSearch.setOnClickListener {
+
+        }
+
+        binding.btnLocation.setOnClickListener {
+
+        }
 
         return binding.root
     }
@@ -72,6 +95,13 @@ class DetailFragment : Fragment() {
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // fetch representatives
+        representativeViewModel.fetch()
     }
 
 }
