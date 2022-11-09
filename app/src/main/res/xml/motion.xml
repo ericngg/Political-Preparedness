@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- xml/step1.xml -->
+
+<MotionScene xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TODO: Define a Transition -->
+    <Transition
+        app:constraintSetStart="@+id/start"
+        app:constraintSetEnd="@+id/end" >
+        <OnSwipe
+            app:dragDirection="dragUp"
+            app:onTouchUp="stop"
+            app:touchAnchorId="@id/rvRepresentatives" />
+    </Transition>
+
+    <!-- TODO: Define @id/start -->
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/clForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent" />
+    </ConstraintSet>
+    <!-- TODO: Define @id/end -->
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/clForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="parent" />
+    </ConstraintSet>
+</MotionScene>

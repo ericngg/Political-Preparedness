@@ -3,5 +3,10 @@
     <string name="app_name">Political Preparedness</string>
 
     <!-- TODO: Add necessary string values -->
-
+    <string name="location_denied">Error: Location permission required for the function to work</string>
+    <string name="settings">SETTINGS</string>
+    <string name="empty_address1">Address1 is empty</string>
+    <string name="empty_address2">Address2 is empty</string>
+    <string name="empty_city">City is empty</string>
+    <string name="empty_zip">Zip is empty</string>
 </resources>

@@ -36,6 +36,14 @@ class RepresentativeListAdapter(private val clickListener: RepresentativeListene
             //TODO: Show social links ** Hint: Use provided helper methods
             //TODO: Show www link ** Hint: Use provided helper methods
 
+            item.official.urls?.let { urls ->
+                showWWWLinks(urls)
+            }
+
+            item.official.channels?.let { channels ->
+                showSocialLinks(channels)
+            }
+
             binding.executePendingBindings()
         }
 

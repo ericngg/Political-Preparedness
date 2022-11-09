@@ -25,6 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="profile picture"
+            app:profileImage="@{representative.official.photoUrl}"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -36,6 +37,7 @@
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/ivProfile"
             app:layout_constraintTop_toTopOf="parent"
+            android:text="@{representative.office.name}"
             tools:text="President of the United States" />
 
         <TextView
@@ -46,6 +48,7 @@
             android:layout_marginTop="5dp"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:text="@{representative.official.name}"
             app:layout_constraintStart_toEndOf="@+id/ivProfile"
             app:layout_constraintTop_toBottomOf="@+id/tvRole"
             tools:text="Barack Obama" />
@@ -56,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:textSize="14sp"
+            android:text="@{representative.official.party}"
             app:layout_constraintStart_toEndOf="@+id/ivProfile"
             app:layout_constraintTop_toBottomOf="@+id/tvName"
             tools:text="Democratic Party" />
